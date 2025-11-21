@@ -3,7 +3,7 @@ import React from 'react'
 
 const Images = () => {
   return (
-    <View>
+    <View className="flex-1 items-center bg-gray-800 p-4">
       <Text>Images</Text>
     </View>
   )

@@ -11,9 +11,9 @@ import {
     Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 import { Stack } from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import SafeAreaView from 'react-native-safe-area-view';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import AppHeader from "@/components/app-header";
 
 export default function RootLayout() {
     const [isReady, setIsReady] = useState(false);
@@ -56,7 +56,7 @@ export default function RootLayout() {
 
     return (
         <SafeAreaProvider onLayout={onLayoutRootView}>
-            <SafeAreaView forceInset={{ top: 'always'}} className='flex-1 bg-gray-800'>
+            <SafeAreaView edges={['top', 'bottom']} className='flex-1 bg-gray-800'>
                 <StatusBar style="light" translucent />
                 <Stack
                     initialRouteName="index"
@@ -64,8 +64,20 @@ export default function RootLayout() {
                         headerShown: false,
                     }}>
                     <Stack.Screen name="index" />
-                    <Stack.Screen name="home" />
-                    <Stack.Screen name="images" />
+                    <Stack.Screen
+                        name="home"
+                        options={{
+                            headerShown: true,
+                            header: () => <AppHeader back />
+                        }}
+                    />
+                    <Stack.Screen
+                        name="images"
+                        options={{
+                            headerShown: true,
+                            header: () => <AppHeader back close />
+                        }}
+                    />
                 </Stack>
             </SafeAreaView>
         </SafeAreaProvider>
