@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Tech OS",
-    "slug": "appsaas",
+    "slug": "techosimages",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -28,7 +28,7 @@
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.andersonbrodrigues.appsaas"
+      "package": "com.techos.images"
     },
     "web": {
       "bundler": "metro",
@@ -52,7 +52,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "photosPermission": "O aplicativo acessa suas imagens para fazer upload para o servidor de oredens de serviço."
         }
       ]
     ],
