@@ -1,5 +1,8 @@
-import { CameraIcon, Search } from 'lucide-react-native'
-import React, { useState } from 'react'
+import { AuthContext } from '@/context/AuthContext'
+import apisos from '@/services/apisos'
+import { Link } from 'expo-router'
+import { ImageUpIcon, Search } from 'lucide-react-native'
+import React, { useContext, useState } from 'react'
 import {
   ActivityIndicator,
   Keyboard,
@@ -8,17 +11,31 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import apisos from '@/services/apisos'
-import { Link, router } from 'expo-router'
 
-// Define a interface para cada item do resultado
+interface SearchResultItem {
+  id: number;
+  order_number: string;
+  service_status: string;
+  customer?: {
+    name: string;
+  };
+  equipment?: {
+    equipment: string;
+  };
+  error?: string;
+}
+
 const Home = () => {
+  const { user } = useContext(AuthContext);
   const [orderNumber, setOrderNumber] = useState('')
-  const [searchResult, setSearchResult] = useState<any>([]) // ← AGORA É ARRAY
+  const [searchResult, setSearchResult] = useState<SearchResultItem[]>([])
   const [loading, setLoading] = useState(false)
 
   const handleSearch = async () => {
-    if (!orderNumber.trim()) return
+    if (!orderNumber.trim()) {
+      setSearchResult([]);
+      return
+    }
 
     Keyboard.dismiss()
     setLoading(true)
@@ -37,11 +54,9 @@ const Home = () => {
 
       setSearchResult([
         {
+          id: 0, // Adicionado para conformar com a interface
           order_number: '',
           service_status: '',
-          name: '',
-          customer: '',
-          equipment: '',
           error: 'Ordem de serviço não encontrada.',
         }
       ])
@@ -51,15 +66,18 @@ const Home = () => {
   }
 
   return (
-    <View className="flex-1 items-center bg-gray-800 p-4">
-      <Text className="text-white text-2xl font-bold mt-10 mb-6">
-        Consultar
+    <View className="flex-1 items-center bg-gray-800 px-4">
+      <Text className="text-yellow-400 text-sm mt-1">
+        Você entrou como, {user?.name}
+      </Text>
+      <Text className="text-white text-2xl font-bold mt-8 mb-6">
+        Buscar ordem para inserir imagem
       </Text>
 
       <View className="w-full flex-row items-center">
         <TextInput
           className="flex-1 rounded-l-lg bg-gray-700 p-4 text-lg text-white h-[58px]"
-          placeholder="Digite o número"
+          placeholder="Digite o número da ordem de serviço"
           placeholderTextColor="#999"
           keyboardType="numeric"
           value={orderNumber}
@@ -82,7 +100,7 @@ const Home = () => {
 
       {!loading && searchResult.length > 0 && (
         <View className="mt-8 w-full space-y-4">
-          {searchResult.map((item: any, index: number) => (
+          {searchResult.map((item, index) => (
             item.error ? (
               <View key={index} className="bg-gray-600 p-6 rounded-lg">
                 <Text className="text-red-400 text-center text-lg">
@@ -121,7 +139,7 @@ const Home = () => {
                   asChild
                 >
                   <TouchableOpacity className="p-3 bg-gray-700 rounded-xl active:opacity-80">
-                    <CameraIcon size={48} color="#EEA917" />
+                    <ImageUpIcon size={48} color="#EEA917" />
                   </TouchableOpacity>
                 </Link>
               </View>

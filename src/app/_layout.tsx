@@ -1,19 +1,21 @@
 import "@/styles/global.css";
-import React, { useCallback, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
+import React, { useCallback, useEffect, useState } from 'react';
 
 SplashScreen.preventAutoHideAsync();
 
+import AppHeader from "@/components/app-header";
+
 import {
-    useFonts,
     Roboto_400Regular,
     Roboto_500Medium,
     Roboto_700Bold,
+    useFonts,
 } from '@expo-google-fonts/roboto';
 import { Stack } from 'expo-router';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import AppHeader from "@/components/app-header";
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import AuthProvider from "@/context/AuthContext";
 
 export default function RootLayout() {
     const [isReady, setIsReady] = useState(false);
@@ -55,31 +57,33 @@ export default function RootLayout() {
     }
 
     return (
-        <SafeAreaProvider onLayout={onLayoutRootView}>
-            <SafeAreaView edges={['top', 'bottom']} className='flex-1 bg-gray-800'>
-                <StatusBar style="light" translucent />
-                <Stack
-                    initialRouteName="index"
-                    screenOptions={{
-                        headerShown: false,
-                    }}>
-                    <Stack.Screen name="index" />
-                    <Stack.Screen
-                        name="home"
-                        options={{
-                            headerShown: true,
-                            header: () => <AppHeader back />
-                        }}
-                    />
-                    <Stack.Screen
-                        name="images"
-                        options={{
-                            headerShown: true,
-                            header: () => <AppHeader back close />
-                        }}
-                    />
-                </Stack>
-            </SafeAreaView>
-        </SafeAreaProvider>
+        <AuthProvider>
+            <SafeAreaProvider onLayout={onLayoutRootView}>
+                <SafeAreaView edges={['top', 'bottom']} className='flex-1 bg-gray-800'>
+                    <StatusBar style="light" translucent />
+                    <Stack
+                        initialRouteName="index"
+                        screenOptions={{
+                            headerShown: false,
+                        }}>
+                        <Stack.Screen name="index" />
+                        <Stack.Screen
+                            name="home"
+                            options={{
+                                headerShown: true,
+                                header: () => <AppHeader user logout />
+                            }}
+                        />
+                        <Stack.Screen
+                            name="images"
+                            options={{
+                                headerShown: true,
+                                header: () => <AppHeader back close />
+                            }}
+                        />
+                    </Stack>
+                </SafeAreaView>
+            </SafeAreaProvider>
+        </AuthProvider>
     )
 }

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "appsaas",
+    "name": "Tech OS",
     "slug": "appsaas",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,18 +11,24 @@
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1f2937"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.andersonbrodrigues.appsaas",
+      "backgroundColor": "#1f2937"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#1f2937"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.andersonbrodrigues.appsaas"
     },
     "web": {
       "bundler": "metro",
@@ -31,16 +37,22 @@
     },
     "plugins": [
       "expo-router",
-       [
+      [
         "expo-splash-screen",
         {
-          "backgroundColor": "#232323",
-          "image": "./assets/splash-icon.png",
+          "backgroundColor": "#1f2937",
+          "image": "./assets/images/splash-icon.png",
           "dark": {
-            "image": "./assets/splash-icon-dark.png",
-            "backgroundColor": "#000000"
+            "image": "./assets/images/splash-icon.png",
+            "backgroundColor": "#1f2937"
           },
           "imageWidth": 200
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
     ],
