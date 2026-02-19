@@ -54,7 +54,9 @@
         {
           "photosPermission": "O aplicativo acessa suas imagens para fazer upload para o servidor de oredens de serviço."
         }
-      ]
+      ],
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
