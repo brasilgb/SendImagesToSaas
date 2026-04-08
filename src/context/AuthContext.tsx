@@ -1,9 +1,11 @@
-import apisos from '@/services/apisos';
+import apisos, { setApiAuthToken } from '@/services/apisos';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import React, { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 
 type SignInProps = { email: string; password: string };
+const STORAGE_USER_KEY = '@AppSaaS:user';
+const STORAGE_TOKEN_KEY = '@AppSaaS:token';
 
 // Interface para definir a estrutura do objeto de usuário
 interface UserProps {
@@ -32,15 +34,25 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
   // Armazena usuário no storage
   async function storeUser(data: UserProps) {
-    await AsyncStorage.setItem('@AppSaaS:user', JSON.stringify(data));
+    await AsyncStorage.setItem(STORAGE_USER_KEY, JSON.stringify(data));
+  }
+
+  async function storeToken(token: string) {
+    await AsyncStorage.setItem(STORAGE_TOKEN_KEY, token);
   }
 
   useEffect(() => {
     async function loadStorage() {
-      const storageUser = await AsyncStorage.getItem('@AppSaaS:user');
+      const [storageUser, storageToken] = await Promise.all([
+        AsyncStorage.getItem(STORAGE_USER_KEY),
+        AsyncStorage.getItem(STORAGE_TOKEN_KEY),
+      ]);
+
       if (storageUser) {
         setUser(JSON.parse(storageUser));
       }
+
+      setApiAuthToken(storageToken);
     }
     loadStorage();
   }, []);
@@ -55,9 +67,13 @@ function AuthProvider({ children }: { children: ReactNode }) {
         "password": password
       });
 
-      const { result, success } = response.data;
+      const { result, success, access_token } = response.data;
       if (!success) {
         setLoginError('Falha no login. Verifique suas credenciais.');
+        return;
+      }
+      if (!access_token) {
+        setLoginError('Token de acesso não retornado pela API.');
         return;
       }
 
@@ -67,7 +83,8 @@ function AuthProvider({ children }: { children: ReactNode }) {
         tenant_id: result.tenant_id
       };
 
-      await storeUser(userData);
+      await Promise.all([storeUser(userData), storeToken(access_token)]);
+      setApiAuthToken(access_token);
       setUser(userData);
       router.replace('/home'); // Navega para a home após o login
 
@@ -79,7 +96,17 @@ function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function signOut() {
-    await AsyncStorage.removeItem('@AppSaaS:user');
+    try {
+      await apisos.post('logoutuser');
+    } catch {
+      // Ignora erro de logout no servidor para não bloquear saída local
+    }
+
+    await Promise.all([
+      AsyncStorage.removeItem(STORAGE_USER_KEY),
+      AsyncStorage.removeItem(STORAGE_TOKEN_KEY),
+    ]);
+    setApiAuthToken(null);
     setUser(null);
     router.replace('/'); // Volta para a tela de login
   }
