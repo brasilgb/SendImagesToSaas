@@ -1,8 +1,8 @@
 import { AuthContext } from '@/context/AuthContext'
-import React, { useContext, useState, useEffect } from 'react'
-import { ActivityIndicator, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
-import { Eye, EyeOff, Check } from 'lucide-react-native'
+import { Check, Eye, EyeOff } from 'lucide-react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 const Login = () => {
   const { signIn, loading, loginError } = useContext(AuthContext)
