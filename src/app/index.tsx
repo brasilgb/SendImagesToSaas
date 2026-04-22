@@ -1,17 +1,49 @@
 import { AuthContext } from '@/context/AuthContext'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
+import * as SecureStore from 'expo-secure-store'
+import { Eye, EyeOff, Check } from 'lucide-react-native'
 
 const Login = () => {
   const { signIn, loading, loginError } = useContext(AuthContext)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [rememberPassword, setRememberPassword] = useState(false)
+
+  useEffect(() => {
+    const loadCredentials = async () => {
+      try {
+        const savedEmail = await SecureStore.getItemAsync('email')
+        const savedPassword = await SecureStore.getItemAsync('password')
+        if (savedEmail && savedPassword) {
+          setEmail(savedEmail)
+          setPassword(savedPassword)
+          setRememberPassword(true)
+        }
+      } catch (error) {
+        console.error('Error loading credentials:', error)
+      }
+    }
+    loadCredentials()
+  }, [])
 
   const handleLogin = async () => {
     if (!email || !password) {
       return; // Impede o envio se os campos estiverem vazios
     }
-    await signIn({ email, password });
+    try {
+      await signIn({ email, password });
+      if (rememberPassword) {
+        await SecureStore.setItemAsync('email', email)
+        await SecureStore.setItemAsync('password', password)
+      } else {
+        await SecureStore.deleteItemAsync('email')
+        await SecureStore.deleteItemAsync('password')
+      }
+    } catch (error) {
+      // Error is handled in AuthContext
+    }
   }
 
   return (
@@ -35,14 +67,31 @@ const Login = () => {
           onChangeText={setEmail}
         />
 
-        <TextInput
-          className="w-full rounded-lg bg-gray-700 p-4 text-lg text-white h-[58px]"
-          placeholder="Senha"
-          placeholderTextColor="#999"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+        <View className="relative">
+          <TextInput
+            className="w-full rounded-lg bg-gray-700 p-4 text-lg text-white h-[58px] pr-12"
+            placeholder="Senha"
+            placeholderTextColor="#999"
+            secureTextEntry={!showPassword}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity
+            className="absolute right-4 top-1/2 transform -translate-y-1/2"
+            onPress={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff size={24} color="#999" /> : <Eye size={24} color="#999" />}
+          </TouchableOpacity>
+        </View>
+
+        <View className="flex-row items-center mt-2">
+          <TouchableOpacity onPress={() => setRememberPassword(!rememberPassword)}>
+            <View className="w-5 h-5 border border-white rounded mr-2 items-center justify-center">
+              {rememberPassword && <Check size={16} color="white" />}
+            </View>
+          </TouchableOpacity>
+          <Text className="text-white">Lembrar senha</Text>
+        </View>
 
         {loginError ? <Text className="text-red-400 text-center mt-2">{loginError}</Text> : null}
 
