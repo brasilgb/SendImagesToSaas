@@ -34,6 +34,15 @@ const Home = () => {
   const [searchAttempted, setSearchAttempted] = useState(false)
   const normalizedOrderNumber = orderNumber.trim()
 
+  const sortByOrderNumber = (items: SearchResultItem[]) => {
+    return [...items].sort((first, second) =>
+      first.order_number.localeCompare(second.order_number, undefined, {
+        numeric: true,
+        sensitivity: 'base',
+      })
+    )
+  }
+
   const handleSearch = async () => {
     if (!normalizedOrderNumber) {
       setSearchResult([]);
@@ -52,7 +61,7 @@ const Home = () => {
       const response = await apisos.get(`order/${normalizedOrderNumber}`)
       const result = response.data?.result ?? []
       const normalizedResult = Array.isArray(result) ? result : [result]
-      setSearchResult(normalizedResult.filter(Boolean))
+      setSearchResult(sortByOrderNumber(normalizedResult.filter(Boolean)))
 
     } catch (error: any) {
       const errorMessage =
@@ -136,7 +145,7 @@ const Home = () => {
           <View className="w-full space-y-4">
             {searchResult.map((item) => (
               <View
-                key={item.id}
+                key={item.order_number}
                 className="bg-gray-600 px-5 mb-2 py-4 rounded-xl flex-row items-center justify-between shadow-md shadow-black/40"
               >
                 <View className="flex-1 mr-4">
@@ -158,7 +167,7 @@ const Home = () => {
                 </View>
 
                 <Link
-                  href={{ pathname: "/images", params: { order: item.id } }}
+                  href={{ pathname: "/images", params: { order: item.order_number } }}
                   asChild
                 >
                   <TouchableOpacity className="p-3 bg-gray-700 rounded-xl active:opacity-80">

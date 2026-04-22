@@ -59,7 +59,7 @@ const Images = () => {
 
     setLoading(true);
     await apisos.post('upload', {
-      order_id: order,
+      order_number: order,
       filename: image,
       tenant_id: user?.tenant_id
     }).then((res) => {
@@ -102,20 +102,23 @@ const Images = () => {
   };
 
   const getShowImages = async () => {
-    await apisos.get(`images/${order}`)
-      .then((res) => {
-        const { result } = res.data;
-        setImageView(result);
-      })
+    try {
+      const res = await apisos.get(`images/${order}`);
+      const { result } = res.data;
+      setImageView(result);
+    } catch (err: any) {
+      console.log('Erro ao carregar imagens:', err.response?.status, err.response?.data);
+      Alert.alert('Erro', 'Não foi possível carregar as imagens. Verifique a conexão com o servidor.');
+    }
   };
 
   useFocusEffect(
     useCallback(() => {
       getShowImages();
-    }, [])
+    }, [order])
   );
 
-  const lockUpload = imageView.length === 6;
+  const lockUpload = imageView.length === 4;
 
   return (
     <>
@@ -130,7 +133,7 @@ const Images = () => {
           </View>
         </View>
         <View className='flex-row items-center justify-center'>
-          <Text className='text-red-400'>Máximo 6 imagens</Text>
+          <Text className='text-red-400'>Máximo 4 imagens</Text>
         </View>
         <View className='flex-row items-center justify-around py-6'>
           <View>
