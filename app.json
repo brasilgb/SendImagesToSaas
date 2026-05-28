@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Tech OS",
-    "slug": "techosimages",
+    "name": "SigmaUp",
+    "slug": "sigmaosimages",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "appsaas",
+    "scheme": "sigmaos",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.andersonbrodrigues.appsaas",
+      "bundleIdentifier": "com.andersonbrodrigues.sigmaos",
       "backgroundColor": "#1f2937"
     },
     "android": {
@@ -28,7 +28,7 @@
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.techos.images"
+      "package": "com.sigmaos.images"
     },
     "web": {
       "bundler": "metro",
@@ -61,6 +61,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "033affd3-9cf7-47f6-810b-6c8ae85b14ee"
+      }
     }
   }
 }
