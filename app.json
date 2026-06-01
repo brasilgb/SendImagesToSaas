@@ -1,27 +1,27 @@
 {
   "expo": {
-    "name": "Vetor Image Up",
-    "slug": "vetorosimages",
+    "name": "VetorOS Image",
+    "slug": "vetorosimage",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/adaptive-icon.png",
     "scheme": "vetoros",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1f2937"
+      "backgroundColor": "#0b1220"
     },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.andersonbrodrigues.vetoros",
-      "backgroundColor": "#1f2937"
+      "backgroundColor": "#0b1220"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptative-icon.png",
-        "backgroundColor": "#1f2937"
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#0b1220"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -33,18 +33,18 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/adaptative-icon.png"
+      "favicon": "./assets/images/adaptive-icon.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#1f2937",
+          "backgroundColor": "#0b1220",
           "image": "./assets/images/splash-icon.png",
           "dark": {
             "image": "./assets/images/splash-icon.png",
-            "backgroundColor": "#1f2937"
+            "backgroundColor": "#0b1220"
           },
           "imageWidth": 200
         }
