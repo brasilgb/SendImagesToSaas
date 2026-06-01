@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "SigmaUp",
-    "slug": "sigmaosimages",
+    "name": "Vetor Image Up",
+    "slug": "vetorosimages",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "sigmaos",
+    "scheme": "vetoros",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -15,12 +15,12 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.andersonbrodrigues.sigmaos",
+      "bundleIdentifier": "com.andersonbrodrigues.vetoros",
       "backgroundColor": "#1f2937"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptative-icon.png",
         "backgroundColor": "#1f2937"
       },
       "edgeToEdgeEnabled": true,
@@ -28,12 +28,12 @@
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.sigmaos.images"
+      "package": "com.vetoros.images"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/adaptative-icon.png"
     },
     "plugins": [
       "expo-router",
