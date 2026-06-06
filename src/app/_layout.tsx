@@ -59,8 +59,8 @@ export default function RootLayout() {
     return (
         <AuthProvider>
             <SafeAreaProvider onLayout={onLayoutRootView}>
-                <SafeAreaView edges={['top', 'bottom']} className='flex-1 bg-background'>
-                    <StatusBar style="light" translucent />
+                <SafeAreaView edges={['bottom']} className='flex-1 bg-background'>
+                    <StatusBar style="light" backgroundColor="transparent" translucent />
                     <Stack
                         initialRouteName="index"
                         screenOptions={{

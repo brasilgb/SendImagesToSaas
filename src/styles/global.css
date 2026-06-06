@@ -3,35 +3,35 @@
 @tailwind utilities;
 
 :root {
-  --radius: 0.65rem;
+  --radius: 0.5rem;
 
-  --background: #f8fafc;
-  --foreground: #0b1220;
+  --background: #eef2f7;
+  --foreground: #172033;
 
-  --primary: #0d47a1;
+  --primary: #2f7dd1;
   --primary-foreground: #ffffff;
 
   --card: #ffffff;
-  --card-foreground: #0b1220;
+  --card-foreground: #172033;
   --popover: #ffffff;
-  --popover-foreground: #0b1220;
+  --popover-foreground: #172033;
 
-  --muted: #eef2f7;
-  --muted-foreground: #6b7280;
-  --accent: #e6f7ff;
-  --accent-foreground: #0d47a1;
+  --muted: #f4f7fb;
+  --muted-foreground: #637083;
+  --accent: #15365f;
+  --accent-foreground: #ffffff;
 
-  --border: #dbe3ef;
-  --input: #dbe3ef;
-  --ring: #00b4ff;
+  --border: #d8e0ea;
+  --input: #d8e0ea;
+  --ring: #2f7dd1;
 
-  --sidebar: #f1f5f9;
-  --sidebar-foreground: #0b1220;
+  --sidebar: #eef2f7;
+  --sidebar-foreground: #172033;
   --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: #e6f7ff;
-  --sidebar-accent-foreground: #0d47a1;
-  --sidebar-border: #dbe3ef;
+  --sidebar-accent: #15365f;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #d8e0ea;
 
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.98 0 0);
