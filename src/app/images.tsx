@@ -197,7 +197,7 @@ const Images = () => {
                         <Trash2 size={18} color="#e5484d" />
                       </Pressable>
                     </View>
-                  </View>
+                </View>
                 ))}
               </View>
             </View>

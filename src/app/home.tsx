@@ -147,6 +147,7 @@ const Home = () => {
           <Text className="text-muted-foreground mb-3">
             {searchResult.length} resultado(s) encontrado(s)
           </Text>
+          
           <View className="w-full">
             {searchResult.map((item) => (
               <View
@@ -156,10 +157,9 @@ const Home = () => {
                 <View className="flex-row items-start justify-between">
                   <View className="flex-1 pr-4">
                     <Text className="text-muted-foreground text-xs uppercase font-bold">Ordem de serviço</Text>
-                    <Text className="text-card-foreground text-3xl font-bold mt-1">{item.order_number}</Text>
                   </View>
                   <View className="rounded-full bg-accent px-3 py-1">
-                    <Text className="text-accent-foreground text-xs font-bold">{item.service_status}</Text>
+                    <Text className="text-accent-foreground text-xs font-bold">{item.order_number}</Text>
                   </View>
                 </View>
 
