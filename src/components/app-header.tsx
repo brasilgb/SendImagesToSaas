@@ -24,7 +24,7 @@ const AppHeader = ({ back, close, logout, user }: AppHeaderProps) => {
             <View className='w-11 items-start'>
                 {user && (
                     <TouchableOpacity
-                        className="h-[38px] w-[38px] items-center justify-center rounded-lg bg-white/10 active:opacity-80"
+                        className="h-9 w-9 items-center justify-center rounded-lg bg-transparent active:opacity-80"
                         onPress={() => router.replace('/home')}
                     >
                         <UserCircleIcon size={24} color={'#f5f4ef'} />
@@ -32,7 +32,7 @@ const AppHeader = ({ back, close, logout, user }: AppHeaderProps) => {
                 )}
                 {back && (
                     <TouchableOpacity
-                        className="h-[38px] w-[38px] items-center justify-center rounded-lg bg-white/10 active:opacity-80"
+                        className="h-9 w-9 items-center justify-center rounded-lg bg-transparent active:opacity-80"
                         onPress={() => router.back()}
                     >
                         <ChevronLeftIcon color={'#f5f4ef'} size={24} />
@@ -42,13 +42,13 @@ const AppHeader = ({ back, close, logout, user }: AppHeaderProps) => {
             <View className="h-10 w-10 items-center justify-center rounded-lg">
                 <Image
                     source={require('@/assets/images/logo.png')}
-                    style={{ width: 34, height: 34 }}
+                    style={{ width: 32, height: 32 }}
                 />
             </View>
             <View className='w-11 items-end'>
                 {close && (
                     <TouchableOpacity
-                        className="h-[38px] w-[38px] items-center justify-center rounded-lg bg-white/10 active:opacity-80"
+                        className="h-9 w-9 items-center justify-center rounded-lg bg-transparent active:opacity-80"
                         onPress={() => router.replace('/home')}
                     >
                         <X size={24} color={'#f5f4ef'} />
@@ -56,7 +56,7 @@ const AppHeader = ({ back, close, logout, user }: AppHeaderProps) => {
                 )}
                 {logout &&
                     <TouchableOpacity
-                        className="h-[38px] w-[38px] items-center justify-center rounded-lg bg-white/10 active:opacity-80"
+                        className="h-9 w-9 items-center justify-center rounded-lg bg-transparent active:opacity-80"
                         onPress={() => signOut()}
                     >
                         <LogOutIcon color={'#f5f4ef'} size={24} />
