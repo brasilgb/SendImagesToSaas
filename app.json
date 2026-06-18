@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "VetorOS Image",
-    "slug": "vetorosimage",
+    "name": "VetorOS Imagem",
+    "slug": "vetorosimagem",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/adaptive-icon.png",
-    "scheme": "vetoros",
+    "scheme": "vetorimage",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.andersonbrodrigues.vetoros",
+      "bundleIdentifier": "com.andersonbrodrigues.vetorosimagem",
       "backgroundColor": "#0b1220"
     },
     "android": {
@@ -23,12 +23,13 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#0b1220"
       },
-      "edgeToEdgeEnabled": true,
+      "edgeToEdgeEnabled": false,
+      "softwareKeyboardLayoutMode": "resize",
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.vetoros.images"
+      "package": "com.andersonbrodrigues.vetorosimagem"
     },
     "web": {
       "bundler": "metro",

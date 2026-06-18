@@ -2,13 +2,140 @@ import { AuthContext } from '@/context/AuthContext';
 import apisos from '@/services/apisos';
 import * as ImagePicker from 'expo-image-picker';
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
-import { BookImageIcon, CameraIcon, ImageIcon, Trash2 } from 'lucide-react-native';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
+import { BookImageIcon, CameraIcon, ImageIcon, RotateCcw, Trash2, X, ZoomIn, ZoomOut } from 'lucide-react-native';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, Animated, Image, Modal, PanResponder, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 
 interface ImageItem {
   id: number;
   filename: string;
+}
+
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 4;
+
+function ZoomableImageModal({ uri, onClose }: { uri: string | null; onClose: () => void }) {
+  const scale = useRef(new Animated.Value(MIN_ZOOM)).current;
+  const currentScale = useRef(MIN_ZOOM);
+  const initialPinchDistance = useRef<number | null>(null);
+  const initialPinchScale = useRef(MIN_ZOOM);
+
+  const setZoom = useCallback((nextScale: number, animated = true) => {
+    const normalizedScale = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, nextScale));
+    currentScale.current = normalizedScale;
+
+    if (animated) {
+      Animated.spring(scale, {
+        toValue: normalizedScale,
+        useNativeDriver: true,
+        friction: 8,
+      }).start();
+      return;
+    }
+
+    scale.setValue(normalizedScale);
+  }, [scale]);
+
+  useEffect(() => {
+    if (uri) {
+      setZoom(MIN_ZOOM, false);
+    }
+  }, [setZoom, uri]);
+
+  const panResponder = useMemo(() => PanResponder.create({
+    onStartShouldSetPanResponder: (event) => event.nativeEvent.touches.length === 2,
+    onMoveShouldSetPanResponder: (event) => event.nativeEvent.touches.length === 2,
+    onPanResponderGrant: (event) => {
+      const [firstTouch, secondTouch] = event.nativeEvent.touches;
+
+      if (!firstTouch || !secondTouch) {
+        return;
+      }
+
+      initialPinchDistance.current = Math.hypot(
+        secondTouch.pageX - firstTouch.pageX,
+        secondTouch.pageY - firstTouch.pageY,
+      );
+      initialPinchScale.current = currentScale.current;
+    },
+    onPanResponderMove: (event) => {
+      const [firstTouch, secondTouch] = event.nativeEvent.touches;
+
+      if (!firstTouch || !secondTouch || !initialPinchDistance.current) {
+        return;
+      }
+
+      const distance = Math.hypot(
+        secondTouch.pageX - firstTouch.pageX,
+        secondTouch.pageY - firstTouch.pageY,
+      );
+
+      setZoom(initialPinchScale.current * (distance / initialPinchDistance.current), false);
+    },
+    onPanResponderRelease: () => {
+      initialPinchDistance.current = null;
+    },
+    onPanResponderTerminate: () => {
+      initialPinchDistance.current = null;
+    },
+  }), [setZoom]);
+
+  return (
+    <Modal
+      visible={Boolean(uri)}
+      transparent
+      animationType="fade"
+      statusBarTranslucent
+      onRequestClose={onClose}
+    >
+      <View className="flex-1 bg-black">
+        <View className="absolute right-5 top-12 z-10">
+          <Pressable
+            accessibilityLabel="Fechar imagem"
+            className="h-12 w-12 items-center justify-center rounded-full bg-white/15 active:opacity-70"
+            onPress={onClose}
+          >
+            <X size={26} color="#ffffff" />
+          </Pressable>
+        </View>
+
+        <View className="flex-1 items-center justify-center overflow-hidden" {...panResponder.panHandlers}>
+          {uri ? (
+            <Animated.Image
+              source={{ uri }}
+              resizeMode="contain"
+              className="h-full w-full"
+              style={{ transform: [{ scale }] }}
+            />
+          ) : null}
+        </View>
+
+        <View className="absolute bottom-10 left-0 right-0 flex-row items-center justify-center gap-3">
+          <Pressable
+            accessibilityLabel="Diminuir zoom"
+            className="h-12 w-12 items-center justify-center rounded-full bg-white/15 active:opacity-70"
+            onPress={() => setZoom(currentScale.current - 0.5)}
+          >
+            <ZoomOut size={24} color="#ffffff" />
+          </Pressable>
+          <Pressable
+            accessibilityLabel="Redefinir zoom"
+            className="h-12 w-12 items-center justify-center rounded-full bg-white/15 active:opacity-70"
+            onPress={() => setZoom(MIN_ZOOM)}
+          >
+            <RotateCcw size={22} color="#ffffff" />
+          </Pressable>
+          <Pressable
+            accessibilityLabel="Aumentar zoom"
+            className="h-12 w-12 items-center justify-center rounded-full bg-white/15 active:opacity-70"
+            onPress={() => setZoom(currentScale.current + 0.5)}
+          >
+            <ZoomIn size={24} color="#ffffff" />
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
+  );
 }
 
 const Images = () => {
@@ -17,6 +144,7 @@ const Images = () => {
   const height = StatusBar.currentHeight;
   const [loading, setLoading] = useState<boolean>(false);
   const [imageView, setImageView] = useState<ImageItem[]>([]);
+  const [selectedImageUri, setSelectedImageUri] = useState<string | null>(null);
 
   const getPermission = async () => {
 
@@ -184,10 +312,15 @@ const Images = () => {
               <View className='flex-wrap flex-row items-start justify-between gap-y-4'>
                 {imageView.map((img, idx) => (
                   <View key={idx} className='bg-card border border-border rounded-2xl shadow-md shadow-black/30 w-[48%] overflow-hidden'>
-                    <Image
-                      className="w-full h-36"
-                      source={{ uri: `${process.env.EXPO_PUBLIC_SERVER_IP}/storage/orders/${order}/${img.filename}` }}
-                    />
+                    <Pressable
+                      accessibilityLabel={`Ampliar imagem ${idx + 1}`}
+                      onPress={() => setSelectedImageUri(`${process.env.EXPO_PUBLIC_SERVER_IP}/storage/orders/${order}/${img.filename}`)}
+                    >
+                      <Image
+                        className="w-full h-36"
+                        source={{ uri: `${process.env.EXPO_PUBLIC_SERVER_IP}/storage/orders/${order}/${img.filename}` }}
+                      />
+                    </Pressable>
                     <View className="flex-row items-center justify-between p-3">
                       <Text className="text-muted-foreground text-xs font-bold">Imagem {idx + 1}</Text>
                       <Pressable
@@ -209,6 +342,7 @@ const Images = () => {
           <ActivityIndicator color="#00b4ff" size="large" />
         </View>
       )}
+      <ZoomableImageModal uri={selectedImageUri} onClose={() => setSelectedImageUri(null)} />
     </>
   )
 }

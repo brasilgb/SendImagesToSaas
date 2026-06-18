@@ -144,10 +144,6 @@ const Home = () => {
           showsVerticalScrollIndicator={false}
           contentContainerClassName="pb-8"
         >
-          <Text className="text-muted-foreground mb-3">
-            {searchResult.length} resultado(s) encontrado(s)
-          </Text>
-          
           <View className="w-full">
             {searchResult.map((item) => (
               <View
@@ -183,7 +179,7 @@ const Home = () => {
                 >
                   <TouchableOpacity className="mt-5 h-12 flex-row items-center justify-center gap-2 bg-primary rounded-xl active:opacity-80">
                     <ImageUpIcon size={22} color="#0b1220" />
-                    <Text className="text-primary-foreground font-bold text-base">Inserir imagens</Text>
+                    <Text className="text-primary-foreground font-bold text-base">Gerenciar imagens</Text>
                   </TouchableOpacity>
                 </Link>
               </View>
