@@ -96,19 +96,17 @@ function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function signOut() {
-    try {
-      await apisos.post('logoutuser');
-    } catch {
-      // Ignora erro de logout no servidor para não bloquear saída local
-    }
+    const serverLogout = apisos.get('logoutuser').catch(() => undefined);
 
-    await Promise.all([
-      AsyncStorage.removeItem(STORAGE_USER_KEY),
-      AsyncStorage.removeItem(STORAGE_TOKEN_KEY),
-    ]);
     setApiAuthToken(null);
     setUser(null);
     router.replace('/'); // Volta para a tela de login
+
+    await Promise.allSettled([
+      AsyncStorage.removeItem(STORAGE_USER_KEY),
+      AsyncStorage.removeItem(STORAGE_TOKEN_KEY),
+      serverLogout,
+    ]);
   }
 
   return (
