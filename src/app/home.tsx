@@ -6,6 +6,8 @@ import React, { useContext, useState } from 'react'
 import {
   ActivityIndicator,
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -74,7 +76,18 @@ const Home = () => {
   }
 
   return (
-    <View className="flex-1 bg-background px-5 pt-5">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      className="flex-1 bg-background"
+    >
+      <ScrollView
+        className="flex-1"
+        contentContainerClassName="grow px-5 pt-5 pb-8"
+        automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
+        keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
       <View className="rounded-2xl border border-border bg-card p-5 shadow-lg shadow-black/30">
         <View className="h-12 w-12 items-center justify-center rounded-2xl bg-accent">
           <ClipboardList size={26} color="#00b4ff" />
@@ -139,11 +152,7 @@ const Home = () => {
       )}
 
       {!loading && searchResult.length > 0 && (
-        <ScrollView
-          className="mt-5"
-          showsVerticalScrollIndicator={false}
-          contentContainerClassName="pb-8"
-        >
+        <View className="mt-5">
           <View className="w-full">
             {searchResult.map((item) => (
               <View
@@ -185,9 +194,10 @@ const Home = () => {
               </View>
             ))}
           </View>
-        </ScrollView>
+        </View>
       )}
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

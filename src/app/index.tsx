@@ -48,14 +48,13 @@ const Login = () => {
 
   return (
     <KeyboardAvoidingView
-      enabled={Platform.OS === 'ios'}
-      behavior="padding"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 24 : 0}
       className="flex-1 bg-background"
     >
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 16, paddingVertical: 18 }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 16, paddingTop: 18, paddingBottom: 32 }}
         automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
         keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
         keyboardShouldPersistTaps="handled"
