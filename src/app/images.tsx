@@ -13,6 +13,7 @@ interface ImageItem {
 
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
+const MAX_IMAGES = 8;
 
 function ZoomableImageModal({ uri, onClose }: { uri: string | null; onClose: () => void }) {
   const scale = useRef(new Animated.Value(MIN_ZOOM)).current;
@@ -245,7 +246,7 @@ const Images = () => {
     }, [order])
   );
 
-  const lockUpload = imageView.length === 4;
+  const lockUpload = imageView.length >= MAX_IMAGES;
   const uploadedCount = imageView.length;
 
   return (
@@ -261,7 +262,7 @@ const Images = () => {
               <View className="flex-1 pr-4">
                 <Text className='text-muted-foreground text-xs uppercase font-bold'>Upload de arquivos</Text>
                 <Text className='text-foreground text-3xl font-bold mt-2'>OS {order}</Text>
-                <Text className='text-muted-foreground text-base mt-2'>Anexe até quatro imagens nesta ordem de serviço.</Text>
+                <Text className='text-muted-foreground text-base mt-2'>Anexe até oito imagens nesta ordem de serviço.</Text>
               </View>
               <View className='h-14 w-14 rounded-2xl bg-accent items-center justify-center'>
                 <ImageIcon size={28} color="#00b4ff" />
@@ -271,12 +272,12 @@ const Images = () => {
             <View className="mt-5 h-2 rounded-full bg-muted overflow-hidden">
               <View
                 className="h-full rounded-full bg-ring"
-                style={{ width: `${Math.min(uploadedCount, 4) * 25}%` }}
+                style={{ width: `${(Math.min(uploadedCount, MAX_IMAGES) / MAX_IMAGES) * 100}%` }}
               />
             </View>
             <View className='mt-3 flex-row items-center justify-between'>
               <Text className='text-muted-foreground text-sm'>Limite de imagens</Text>
-              <Text className='text-foreground text-sm font-bold'>{uploadedCount}/4</Text>
+              <Text className='text-foreground text-sm font-bold'>{uploadedCount}/{MAX_IMAGES}</Text>
             </View>
           </View>
 
